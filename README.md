@@ -10,7 +10,7 @@
 
 | Module | Description |
 |----------|-------------|
-| uart_parser.c | UART frame parser implemented using a finite state machine with checksum validation, inter-byte timeout detection, timeout recovery, and frame verification. |
+| uart_parser.c | UART FRAME parser implemented using a finite state machine with checksum validation, inter-byte timeout detection, timeout recovery, and frame verification. |
 
 ---
 
