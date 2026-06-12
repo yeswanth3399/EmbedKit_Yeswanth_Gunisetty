@@ -102,10 +102,10 @@ The parser is implemented using the following states:
 ### Frame Validation
 
 - Valid frame detection
-- Checksum error detection
-- Timeout detection
-- Back-to-back frame support
 - Payload length validation
+- Checksum error detection
+- Back-to-back frame support
+- Timeout detection
 
 ---
 
