@@ -1,0 +1,14 @@
+#Executables
+*.exe
+*.out
+
+#Object files
+*.o
+*.obj
+
+#debug files
+*.dYSM/
+*.pdb
+
+#IDE files
+.vscode/
