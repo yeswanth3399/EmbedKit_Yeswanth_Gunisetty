@@ -1,10 +1,52 @@
-# EmbedKit_UART_Frame_Parser
+# EmbedKit_Yeswanth
+
+## Author
+
+**Yeswanth Gunisetty**
+
+---
+
+## Module Summary
+
+| Module | Description |
+|----------|-------------|
+| uart_parser.c | UART frame parser implemented using a finite state machine with checksum validation, inter-byte timeout detection, timeout recovery, and frame verification. |
+
+---
+
+## Build Instructions
+
+Compile:
+
+```bash
+gcc -Wall -std=c99 uart_parser.c -o uart_parser
+```
+
+Run:
+
+```bash
+./uart_parser
+```
+
+---
+
+## Repository Structure
+
+```text
+EmbedKit_Yeswanth/
+│
+├── uart_parser.c
+├── README.md
+└── .gitignore
+```
+
+---
 
 ## Overview
 
-This assigment implements a UART Frame Parser in C using a finite state machine approach. The parser processes incoming UART data one byte at a time and reconstructs protocol frames based on the specified format.
+This assignment implements a UART Frame Parser in C using a finite state machine approach. The parser processes incoming UART data one byte at a time and reconstructs protocol frames based on the specified format.
 
-The implementation was developed as part of the Embedded Developer Assessment and follows the requirements specified in the problem statement.
+The implementation follows the requirements provided in the Embedded Developer Assessment.
 
 ---
 
@@ -38,36 +80,31 @@ The parser is implemented using the following states:
 - UART_STATE_PAYLOAD
 - UART_STATE_CHECKSUM
 
-The parser processes one byte at a time and transitions between states based on the received data.
-
 ### Inter-Byte Timeout Handling
 
-- Configurable timeout value in milliseconds.
-- Timeout check is performed before processing the incoming byte.
-- Parser resets automatically when the gap between consecutive bytes exceeds the configured timeout.
-- Timeout can be disabled by setting timeout value to 0.
+- Configurable timeout value in milliseconds
+- Timeout check performed before processing the current byte
+- Automatic parser reset after timeout
+- Timeout disable support using timeout value 0
 
 ### Checksum Verification
 
-- Checksum is calculated using XOR operation.
-- Received checksum is compared with calculated checksum.
-- Valid frames are accepted.
-- Invalid frames generate checksum error and parser reset.
+- XOR-based checksum calculation
+- Checksum validation for received frames
+- Checksum error detection and parser recovery
 
 ### Recovery Mechanism
 
-- Automatic recovery after timeout.
-- Re-feeding of the current byte after timeout reset.
-- Ability to resynchronize with the next valid Start Of Frame.
+- Automatic timeout recovery
+- Re-feeding of the current byte after timeout reset
+- Re-synchronization using the next valid SOF byte
 
 ### Frame Validation
-
-The parser supports:
 
 - Valid frame detection
 - Checksum error detection
 - Timeout detection
-- Back-to-back frame processing
+- Back-to-back frame support
 - Payload length validation
 
 ---
@@ -87,69 +124,27 @@ The parser supports:
 
 ### Test Case 1 – Clean Valid Frame
 
-Frame:
-
-AA 01 03 10 20 30 02
-
-Expected Result:
-
-- Frame parsed successfully.
-- Checksum validated.
-- FRAME OK generated.
+- Valid frame reception
+- Checksum verification
+- Successful frame decoding
 
 ### Test Case 2 – Timeout Mid-Frame and Recovery
 
-Scenario:
-
-- Timeout occurs after receiving partial frame.
-- Parser resets automatically.
-- Same byte is re-fed.
-- Parser synchronizes with next valid frame.
-
-Recovery Frame:
-
-AA 05 01 7F 7B
-
-Checksum:
-
-0x05 ^ 0x01 ^ 0x7F = 0x7B
+- Timeout detection after partial frame reception
+- Parser reset
+- Re-feed mechanism validation
+- Recovery frame parsing
 
 ### Test Case 3 – Two Valid Frames Back-to-Back
 
-Frame 1:
-
-AA 03 01 55 57
-
-Checksum:
-
-0x03 ^ 0x01 ^ 0x55 = 0x57
-
-Frame 2:
-
-AA 04 02 AA BB 17
-
-Checksum:
-
-0x04 ^ 0x02 ^ 0xAA ^ 0xBB = 0x17
+- Consecutive frame processing
+- State machine reset verification
+- Multiple valid frame handling
 
 ### Test Case 4 – Timeout Disabled
 
-- Uses the same byte stream as Test Case 2.
-- Timeout value set to 0.
-- No timeout reset occurs.
-- Frame eventually fails checksum verification as expected.
-
----
-
-## Build Instructions
-
-Compile:
-
-gcc -Wall -std=c99 uart_parser.c -o uart_parser
-
-Run:
-
-./uart_parser
+- Timeout checking disabled
+- Verification of checksum error behavior without timeout recovery
 
 ---
 
@@ -157,12 +152,12 @@ Run:
 
 - Standard C99 implementation
 - No dynamic memory allocation
-- No external libraries used
-- Uses fixed-width integer types from stdint.h
-- Clear separation between parser logic and test harness
-- Modular state machine implementation
-- Readable per-byte logging output
-- Clean compilation with gcc warnings enabled
+- No external libraries
+- Fixed-width integer types from stdint.h
+- Byte-by-byte frame processing
+- Modular state machine design
+- Readable logging output
+- Clean compilation using gcc warnings
 
 ---
 
@@ -180,4 +175,4 @@ The XOR calculation evaluates to:
 
 0x01 ^ 0x03 ^ 0x10 ^ 0x20 ^ 0x30 = 0x02
 
-The assessment document example lists 0x22 as the checksum. The implementation follows the XOR-based protocol definition and therefore uses the mathematically correct checksum value of 0x02.
+The implementation follows the XOR-based protocol definition.
