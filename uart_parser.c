@@ -8,6 +8,7 @@
 //defines for UART frame
 #define UART_SOF                0xAAU
 #define UART_MAX_PAYLOAD        16U
+#define UART_TIMEOUT_MS         50U
 
 //defines for the UART Frame validation
 #define UART_FRAME_OK                       1
@@ -104,6 +105,7 @@ int uart_parser_feed_byte(uart_parser_t *parser, uint8_t byte, uint32_t timestam
         case UART_STATE_LEN:
                 parser->len=byte;
 
+                //Reject frames whose payload length exceeds the maximum supported payload size.
                 if(parser->len > UART_MAX_PAYLOAD)
                 {
                     uart_parser_reset(parser);
@@ -156,7 +158,7 @@ int uart_parser_feed_byte(uart_parser_t *parser, uint8_t byte, uint32_t timestam
 }
 
 //print UART Frame
-static void print_frame(uart_parser_t *parser)
+static void print_frame(const uart_parser_t *parser)
 {
     uint8_t i;
 
@@ -251,7 +253,7 @@ static void test_case_1(void)
 
     printf("\n================ TEST CASE 1 ================\n");
 
-    uart_parser_init(&parser, 50U);
+    uart_parser_init(&parser, UART_TIMEOUT_MS);
 
     feed_stream(&parser,bytes,times,(sizeof(bytes)/sizeof(bytes[0])));
 
@@ -294,7 +296,7 @@ static void test_case_2(void)
     };
 
     printf("\n================ TEST CASE 2 ================\n");
-    uart_parser_init(&parser,50U);
+    uart_parser_init(&parser,UART_TIMEOUT_MS);
 
     feed_stream(&parser, bytes,times,(sizeof(bytes)/sizeof(bytes[0])));
 }
@@ -328,7 +330,7 @@ static void test_case_3(void)
     };
 
     printf("\n================ TEST CASE 3 ================\n");
-    uart_parser_init(&parser,50U);
+    uart_parser_init(&parser,UART_TIMEOUT_MS);
 
     feed_stream(&parser, bytes, times, (sizeof(bytes)/sizeof(bytes[0])));
 }
