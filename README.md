@@ -163,12 +163,19 @@ The parser is implemented using the following states:
 
 ## Example/Sample Output
 t=  0ms byte=0xAA -> receiving...
+
 t=  5ms byte=0x01 -> receiving...
+
 t= 10ms byte=0x03 -> receiving...
+
 t= 15ms byte=0x10 -> receiving...
+
 t= 20ms byte=0x20 -> receiving...
+
 t= 25ms byte=0x30 -> receiving...
+
 t= 30ms byte=0x02 -> FRAME OK CMD=0x01 LEN=3 PAYLOAD=[10 20 30]
+
 
 ---
 
